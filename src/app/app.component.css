@@ -1,0 +1,16 @@
+.header {
+  align-items: center;
+  background: white;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  padding: 0.5rem;
+  background: white;
+  width: 20vw;
+}
+
+.main {
+  padding-top: 4rem;
+}
