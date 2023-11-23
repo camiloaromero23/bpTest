@@ -1,3 +1,4 @@
+<app-modal [showModal]="showModal" (userConfirm)="handleModalConfirmation($event)"></app-modal>
 <table *ngIf="(data | async)?.length" class="table">
   <thead class="table-head">
     <tr class="table-row">

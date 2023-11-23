@@ -3,7 +3,7 @@
   <app-button (buttonClick)="handleAddProduct()">Agregar</app-button>
 </div>
 <div class="content-container">
-  <app-table [data]="productsToShow$"></app-table>
+  <app-table [data]="productsToShow$" (productDeleted)="refreshProducts()"></app-table>
   <div class="count-container">
     <div *ngIf="(productsToShow$ | async)?.length === 1">
       {{ (productsToShow$ | async)?.length }} Resultado

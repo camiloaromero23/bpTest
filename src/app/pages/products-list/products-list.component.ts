@@ -41,16 +41,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    this.productsSubscription = this.productService
-      .getProducts()
-      .pipe(shareReplay())
-      .subscribe((products) => {
-        this.productsToShow$.next(products);
-        this.products = products;
-        this.maxPages = Math.ceil(products.length / this.productsAmountToShow);
-        this.productsAmountToShow = +this.select.nativeElement.value;
-        this.updateProductsToShow();
-      });
+    this.refreshProducts();
 
     fromEvent(this.searchInput.nativeElement, 'keyup')
       .pipe(filter(Boolean), debounceTime(150), distinctUntilChanged())
@@ -98,6 +89,19 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
     if (this.page === 1) return;
     this.page--;
     this.updateProductsToShow();
+  }
+
+  refreshProducts() {
+    this.productsSubscription = this.productService
+      .getProducts()
+      .pipe(shareReplay())
+      .subscribe((products) => {
+        this.productsToShow$.next(products);
+        this.products = products;
+        this.maxPages = Math.ceil(products.length / this.productsAmountToShow);
+        this.productsAmountToShow = +this.select.nativeElement.value;
+        this.updateProductsToShow();
+      });
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product, ProductService } from '../../pages/product.service';
 import { tableHeaders, tableKeys } from '../../constants/tableKeys.constant';
-import { Observable } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,8 +13,14 @@ export class TableComponent {
   @Input({ required: true }) data!: Observable<Product[]>;
   tableHeaders = tableHeaders;
   tableKeys = tableKeys;
+  showModal = false;
+  idToDelete!: string;
+  @Output() productDeleted = new EventEmitter<boolean>();
 
-  constructor(private router: Router, private productsService: ProductService) {}
+  constructor(
+    private router: Router,
+    private productsService: ProductService,
+  ) {}
 
   actions = [
     {
@@ -26,8 +32,22 @@ export class TableComponent {
     {
       label: 'Eliminar',
       onClick: (id: string) => {
-        this.productsService.deleteProduct(id);
+        this.idToDelete = id;
+        this.showModal = true;
       },
     },
   ];
+
+  handleModalConfirmation(userConfirm: boolean) {
+    if (userConfirm) {
+      return this.productsService
+        .deleteProduct(this.idToDelete)
+        .subscribe(() => {
+          this.productDeleted.emit(true);
+          this.showModal = false;
+        });
+    }
+
+    return (this.showModal = false);
+  }
 }
