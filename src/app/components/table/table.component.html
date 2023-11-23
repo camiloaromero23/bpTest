@@ -43,7 +43,7 @@
       <td>{{ item.date_release | date: "dd/LL/YYYY" }}</td>
       <td>{{ item.date_revision | date: "dd/LL/YYYY" }}</td>
       <td class="table-row">
-        <app-dropdown [actions]="actions" [item]="item" />
+        <app-dropdown [actions]="actions" (actionClick)="handleActionClick($event, item)" />
       </td>
     </tr>
   </tbody>

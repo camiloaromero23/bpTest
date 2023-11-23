@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tableHeaders, tableKeys } from '../../constants/tableKeys.constant';
@@ -27,19 +27,29 @@ export class TableComponent {
   actions: Action[] = [
     {
       label: 'Editar',
-      onClick: (item: Product) => {
-        this.router.navigate(['/product', item.id]);
-      },
     },
     {
       label: 'Eliminar',
-      onClick: (item: Product) => {
-        this.idToDelete = item.id;
-        this.deleteMessage = `¿Estás seguro de eliminar el producto ${item.name}?`;
-        this.showModal = true;
-      },
     },
   ];
+
+  handleActionClick(action: Action, product: Product) {
+    if (action.label === 'Editar') {
+      return this.handleEditProduct(product);
+    }
+
+    return this.handleDeleteProduct(product);
+  }
+
+  handleEditProduct(product: Product) {
+    this.router.navigate(['/product', product.id]);
+  }
+
+  handleDeleteProduct(product: Product) {
+    this.idToDelete = product.id;
+    this.deleteMessage = `¿Estás seguro de eliminar el producto ${product.name}?`;
+    this.showModal = true;
+  }
 
   handleModalConfirmation(userConfirm: boolean) {
     if (userConfirm) {

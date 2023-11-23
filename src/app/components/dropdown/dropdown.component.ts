@@ -1,9 +1,13 @@
-import { Component, HostListener, Input } from '@angular/core';
-import { Product } from '../../pages/product.service';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 
 export interface Action {
   label: string;
-  onClick: (item: Product) => void;
 }
 
 @Component({
@@ -13,10 +17,9 @@ export interface Action {
 })
 export class DropdownComponent {
   @Input({ required: true }) actions!: Action[];
-  @Input({ required: true }) item!: Product;
   isOpen = false;
-
   clickInside = false;
+  @Output() actionClick = new EventEmitter<Action>();
 
   @HostListener('document:click')
   clickedOut() {
@@ -39,7 +42,7 @@ export class DropdownComponent {
     this.isOpen = true;
   }
 
-  handleClick(action: Action): void {
-    action.onClick(this.item);
+  handleClick(action: Action) {
+    this.actionClick.emit(action);
   }
 }
