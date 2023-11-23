@@ -13,6 +13,7 @@ export const enum ButtonVariant {
 export class ButtonComponent {
   @Input() variant: keyof typeof ButtonVariant = ButtonVariant.primary;
   @Input() disabled = false;
+  @Input() fullWidth = false;
   @Input() type = 'button';
 
   @Output() buttonClick = new EventEmitter();

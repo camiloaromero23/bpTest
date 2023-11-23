@@ -2,7 +2,8 @@
   class="button"
   [ngClass]="{
     secondary: variant === 'secondary',
-    disabled: disabled
+    disabled: disabled,
+    'full-width': fullWidth
   }"
   (click)="buttonClick.emit($event)"
   [disabled]="disabled"

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Product, ProductService } from '../../pages/product.service';
-import { tableHeaders, tableKeys } from '../../constants/tableKeys.constant';
-import { Observable, catchError, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { tableHeaders, tableKeys } from '../../constants/tableKeys.constant';
+import { Product, ProductService } from '../../pages/product.service';
+import { Action } from '../dropdown/dropdown.component';
 
 @Component({
   selector: 'app-table',
@@ -15,6 +16,7 @@ export class TableComponent {
   tableKeys = tableKeys;
   showModal = false;
   idToDelete!: string;
+  deleteMessage = '';
   @Output() productDeleted = new EventEmitter<boolean>();
 
   constructor(
@@ -22,17 +24,18 @@ export class TableComponent {
     private productsService: ProductService,
   ) {}
 
-  actions = [
+  actions: Action[] = [
     {
       label: 'Editar',
-      onClick: (id: string) => {
-        this.router.navigate(['/product', id]);
+      onClick: (item: Product) => {
+        this.router.navigate(['/product', item.id]);
       },
     },
     {
       label: 'Eliminar',
-      onClick: (id: string) => {
-        this.idToDelete = id;
+      onClick: (item: Product) => {
+        this.idToDelete = item.id;
+        this.deleteMessage = `¿Estás seguro de eliminar el producto ${item.name}?`;
         this.showModal = true;
       },
     },

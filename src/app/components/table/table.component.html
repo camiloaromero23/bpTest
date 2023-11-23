@@ -1,4 +1,4 @@
-<app-modal [showModal]="showModal" (userConfirm)="handleModalConfirmation($event)"></app-modal>
+<app-modal [showModal]="showModal" [message]="deleteMessage" (userConfirm)="handleModalConfirmation($event)"></app-modal>
 <table *ngIf="(data | async)?.length" class="table">
   <thead class="table-head">
     <tr class="table-row">
@@ -43,7 +43,7 @@
       <td>{{ item.date_release | date: "dd/LL/YYYY" }}</td>
       <td>{{ item.date_revision | date: "dd/LL/YYYY" }}</td>
       <td class="table-row">
-        <app-dropdown [actions]="actions" [itemId]="item.id" />
+        <app-dropdown [actions]="actions" [item]="item" />
       </td>
     </tr>
   </tbody>

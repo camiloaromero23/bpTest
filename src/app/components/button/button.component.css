@@ -14,3 +14,7 @@
 .disabled {
   opacity: 0.5;
 }
+
+.full-width {
+  width: 100%;
+}
