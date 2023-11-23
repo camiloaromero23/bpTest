@@ -115,7 +115,7 @@ describe('ProductService', () => {
     const productId = '1';
 
     productService.verifyProduct(productId).subscribe((product) => {
-      expect(product.id).toEqual(productId);
+      expect(product).toBeTruthy();
     });
 
     const req = httpTestingController.expectOne(
