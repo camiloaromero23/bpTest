@@ -1,0 +1,14 @@
+<!-- <div (hover)="isOpen = true" (mouseleave)="isOpen = false"> -->
+<img src="/assets/dots.svg" class="options" />
+
+<li class="dropdown" [ngClass]="{ open: isOpen }">
+  <ul
+    *ngFor="let action of actions"
+    class="dropdown-item"
+    (click)="handleClick(action)"
+  >
+    {{
+      action.label
+    }}
+  </ul>
+</li>

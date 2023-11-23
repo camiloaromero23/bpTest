@@ -1,0 +1,16 @@
+.button {
+  padding: 1rem;
+  color: darkblue;
+  background-color: #F6DE4F;
+  border: none;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.secondary {
+  background-color: #E9ECF3;
+}
+
+.disabled {
+  opacity: 0.5;
+}

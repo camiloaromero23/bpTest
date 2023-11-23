@@ -1,0 +1,48 @@
+<table *ngIf="(data | async)?.length" class="table">
+  <thead class="table-head">
+    <tr class="table-row">
+      <th *ngFor="let header of tableHeaders">
+        <span
+          *ngIf="
+            ![tableKeys.logo, tableKeys.name].includes(header);
+            else elseBlock
+          "
+          class="table-header-container"
+        >
+          {{ header }}
+          <div class="info-icon-container">
+            <svg
+              fill="#959798"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+              ></path>
+            </svg>
+          </div>
+        </span>
+        <ng-template #elseBlock>
+          {{ header }}
+        </ng-template>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of data | async" class="table-row">
+      <td>
+        <img [src]="item.logo" class="logo" />
+      </td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.date_release | date: "dd/LL/YYYY" }}</td>
+      <td>{{ item.date_revision | date: "dd/LL/YYYY" }}</td>
+      <td class="table-row">
+        <app-dropdown [actions]="actions" [itemId]="item.id" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="table" *ngIf="!(data | async)?.length">No hay datos</div>

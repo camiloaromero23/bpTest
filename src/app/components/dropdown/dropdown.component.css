@@ -1,0 +1,42 @@
+.options {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown.open {
+  visibility: visible;
+  opacity: 1;
+
+  transition:
+    visibility 0s,
+    opacity 0.125s linear;
+}
+
+.dropdown {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  right: 9rem;
+  list-style: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.dropdown-item {
+  padding: 5px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+}
+
+.dropdown-item:hover {
+  background-color: #ccc;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.dropdown-item:last-of-type {
+  border-bottom: none;
+}

@@ -1,0 +1,12 @@
+<button
+  class="button"
+  [ngClass]="{
+    secondary: variant === 'secondary',
+    disabled: disabled
+  }"
+  (click)="buttonClick.emit($event)"
+  [disabled]="disabled"
+  [type]="type"
+>
+  <ng-content />
+</button>

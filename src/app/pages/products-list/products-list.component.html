@@ -1,1 +1,43 @@
-<p>products-list works!</p>
+<div class="container tools-container">
+  <input class="search-input" placeholder="Search..." #searchInput />
+  <app-button (buttonClick)="handleAddProduct()">Agregar</app-button>
+</div>
+<div class="content-container">
+  <app-table [data]="productsToShow$"></app-table>
+  <div class="count-container">
+    <div *ngIf="(productsToShow$ | async)?.length === 1">
+      {{ (productsToShow$ | async)?.length }} Resultado
+    </div>
+    <div
+      *ngIf="
+        (productsToShow$ | async)?.length !== 1 &&
+        (productsToShow$ | async)?.length
+      "
+    >
+      {{ (productsToShow$ | async)?.length }} Resultados
+    </div>
+    <div class="pagination-container">
+      <app-button
+        id="back-button"
+        variant="secondary"
+        (buttonClick)="decreasePage()"
+        [disabled]="page === 1"
+      >
+        ►
+      </app-button>
+      {{ page }}
+      <app-button
+        variant="secondary"
+        (buttonClick)="increasePage()"
+        [disabled]="page === maxPages"
+      >
+        ►
+      </app-button>
+    </div>
+    <select class="select-amount" #select>
+      <option value="5" selected>5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+    </select>
+  </div>
+</div>
