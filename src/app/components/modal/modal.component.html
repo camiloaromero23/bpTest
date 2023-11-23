@@ -1,10 +1,18 @@
 <div class="modal-overlay" *ngIf="showModal">
   <div class="modal-container">
-    <h2>Confirmation</h2>
-    <p>Are you sure you want to proceed?</p>
+    <h4>{{ message }}</h4>
     <div class="button-container">
-      <button (click)="cancel()">Cancel</button>
-      <button (click)="confirm()">Confirm</button>
+      <app-button
+        (buttonClick)="cancel()"
+        variant="secondary"
+        [fullWidth]="true"
+        class="button"
+      >
+        Cancel
+      </app-button>
+      <app-button (buttonClick)="confirm()" [fullWidth]="true" class="button">
+        Confirm
+      </app-button>
     </div>
   </div>
 </div>

@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ModalComponent {
   @Input() showModal: boolean = false;
+  @Input({ required: true }) message!: string;
   @Output() userConfirm = new EventEmitter<boolean>();
 
   cancel() {
