@@ -15,13 +15,12 @@ export const randomIntFromInterval = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
 const getAuthorId = (): string => {
-  return '1234'; // TODO: Remove this line
-  // let authorId = localStorage.getItem('authorId');
-  // if (!authorId) {
-  //   authorId = String(randomIntFromInterval(1, 99999999));
-  //   localStorage.setItem('authorId', authorId);
-  // }
-  // return authorId;
+  let authorId = localStorage.getItem('authorId');
+  if (!authorId) {
+    authorId = String(randomIntFromInterval(1, 99999999));
+    localStorage.setItem('authorId', authorId);
+  }
+  return authorId;
 };
 
 @Injectable({
