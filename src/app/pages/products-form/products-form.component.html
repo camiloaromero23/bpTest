@@ -1,1 +1,151 @@
-<p>products-form works!</p>
+<div class="container">
+  <h1 class="title">{{ title }}</h1>
+  <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- id -->
+    <div class="form-field">
+      <label>ID:</label>
+      <input
+        class="input"
+        [ngClass]="{ error: id?.touched && id?.errors }"
+        formControlName="id"
+      />
+      <div
+        class="form-field-error"
+        *ngIf="id?.touched && id?.hasError('required')"
+      >
+        El ID es requerido
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="id?.touched && id?.hasError('minlength')"
+      >
+        El ID debe tener al menos 3 caracteres
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="id?.touched && id?.hasError('maxlength')"
+      >
+        El ID no puede tener más de 10 caracteres
+      </div>
+    </div>
+    <!-- name -->
+    <div class="form-field">
+      <label>Name:</label>
+      <input
+        class="input"
+        [ngClass]="{ error: name?.touched && name?.errors }"
+        formControlName="name"
+      />
+      <div
+        class="form-field-error"
+        *ngIf="name?.touched && name?.hasError('required')"
+      >
+        El nombre es requerido
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="name?.touched && name?.hasError('minlength')"
+      >
+        El nombre debe tener al menos 5 caracteres
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="name?.touched && name?.hasError('maxlength')"
+      >
+        El nombre no puede tener más de 100 caracteres
+      </div>
+    </div>
+    <!-- description -->
+    <div class="form-field">
+      <label>Description:</label>
+      <textarea
+        class="input"
+        [ngClass]="{ error: description?.touched && description?.errors }"
+        formControlName="description"
+      ></textarea>
+      <div
+        class="form-field-error"
+        *ngIf="description?.touched && description?.hasError('required')"
+      >
+        La descripción es requerida
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="description?.touched && description?.hasError('minlength')"
+      >
+        La descripción debe tener al menos 10 caracteres
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="description?.touched && description?.hasError('maxlength')"
+      >
+        La descripción no puede tener más de 200 caracteres
+      </div>
+    </div>
+
+    <!-- logo -->
+    <div class="form-field">
+      <label>Logo:</label>
+      <input
+        class="input"
+        [ngClass]="{ error: logo?.touched && logo?.errors }"
+        formControlName="logo"
+      />
+      <div
+        class="form-field-error"
+        *ngIf="logo?.touched && logo?.hasError('required')"
+      >
+        El logo es requerido
+      </div>
+    </div>
+
+    <!-- date_release -->
+    <div class="form-field">
+      <label>Date Release:</label>
+      <input
+        class="input"
+        type="date"
+        [ngClass]="{ error: date_release?.touched && date_release?.errors }"
+        formControlName="date_release"
+        (change)="onDateReleaseChange()"
+      />
+      <div
+        class="form-field-error"
+        *ngIf="date_release?.touched && date_release?.hasError('required')"
+      >
+        La fecha es requerida
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="date_release?.touched && date_release?.hasError('min')"
+      >
+        La fecha debe ser mayor o igual a hoy
+      </div>
+      <div
+        class="form-field-error"
+        *ngIf="
+          date_release?.touched && date_release?.hasError('invalid_type_error')
+        "
+      >
+        {{ date_release?.getError("invalid_type_error") }}
+      </div>
+    </div>
+
+    <!-- date_revision -->
+    <div class="form-field">
+      <label>Date Revision:</label>
+      <input
+        class="input"
+        type="date"
+        formControlName="date_revision"
+        [readOnly]="true"
+      />
+    </div>
+
+    <!-- Submit button -->
+    <div class="buttons-container">
+      <app-button type="button" variant="secondary" (buttonClick)="clearForm()">Reiniciar</app-button>
+      <app-button type="submit">Enviar</app-button>
+    </div>
+  </form>
+</div>
