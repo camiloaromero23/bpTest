@@ -26,6 +26,8 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
   products!: Product[];
   productsToShow$ = new BehaviorSubject<Product[]>([]);
   productsSubscription!: Subscription;
+  searchSubscription!: Subscription;
+  selectSubscription!: Subscription;
   productsAmountToShow = 5;
   page = 1;
   maxPages!: number;
@@ -82,11 +84,6 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
         .slice(pageToShow, pageProductsToShow),
     );
   }
-
-  ngOnDestroy(): void {
-    this.productsSubscription?.unsubscribe();
-  }
-
   handleAddProduct() {
     this.router.navigate(['product']);
   }
@@ -101,5 +98,11 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
     if (this.page === 1) return;
     this.page--;
     this.updateProductsToShow();
+  }
+
+  ngOnDestroy(): void {
+    this.productsSubscription?.unsubscribe();
+    this.searchSubscription?.unsubscribe();
+    this.selectSubscription?.unsubscribe();
   }
 }
