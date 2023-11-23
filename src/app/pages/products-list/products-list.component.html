@@ -29,7 +29,7 @@
       <app-button
         variant="secondary"
         (buttonClick)="increasePage()"
-        [disabled]="page === maxPages"
+        [disabled]="page === maxPages || !(productsToShow$ | async)?.length"
       >
         ►
       </app-button>
