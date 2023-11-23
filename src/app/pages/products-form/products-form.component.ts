@@ -14,6 +14,8 @@ export class ProductsFormComponent {
   // Declare the form group
   form!: FormGroup;
 
+  productId: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
@@ -51,6 +53,32 @@ export class ProductsFormComponent {
           Validators.maxLength(100),
         ],
       ],
+    });
+
+    // Get the product id from the route parameters
+    this.productId = this.route.snapshot.paramMap.get('id');
+
+    // If the id is not null, then we are editing an existing product
+    if (!this.productId) return;
+
+    this.productService.verifyProduct(this.productId).subscribe((exists) => {
+      if (!exists) return;
+
+      this.productService.getProducts().subscribe((products) => {
+        const product = products.find((p) => p.id === this.productId);
+        if (!product) return;
+
+        // Update the form with the product value
+        this.form.patchValue({
+          ...product,
+          date_release: new Date(product.date_release)
+            .toISOString()
+            .split('T')[0],
+          date_revision: new Date(product.date_revision)
+            .toISOString()
+            .split('T')[0],
+        });
+      });
     });
   }
 
@@ -101,9 +129,24 @@ export class ProductsFormComponent {
       return;
     }
 
-    this.productService.createProduct(this.form.value).subscribe(() => {
-      this.clearForm();
-      this.router.navigate(['']);
+    // If the id is not null, then we are editing an existing product
+    if (!this.productId) {
+      this.productService.createProduct(this.form.value).subscribe(() => {
+        this.clearForm();
+        this.router.navigate(['']);
+      });
+      return;
+    }
+
+    this.productService.verifyProduct(this.productId).subscribe((exists) => {
+      if (!exists) {
+        this.router.navigate(['']);
+      }
+
+      this.productService.updateProduct(this.form.value).subscribe(() => {
+        this.clearForm();
+        this.router.navigate(['']);
+      });
     });
   }
 

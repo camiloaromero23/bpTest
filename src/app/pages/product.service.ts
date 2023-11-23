@@ -63,8 +63,8 @@ export class ProductService {
       },
     });
   }
-  verifyProduct(id: string): Observable<Product> {
-    return this.http.get<Product>('/bp/products/verification', {
+  verifyProduct(id: string): Observable<boolean> {
+    return this.http.get<boolean>('/bp/products/verification', {
       headers: {
         authorId: getAuthorId(),
       },
