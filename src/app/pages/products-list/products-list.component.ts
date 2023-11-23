@@ -84,7 +84,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.productsSubscription.unsubscribe();
+    this.productsSubscription?.unsubscribe();
   }
 
   handleAddProduct() {

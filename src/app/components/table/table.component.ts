@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Product } from '../../pages/product.service';
+import { Product, ProductService } from '../../pages/product.service';
 import { tableHeaders, tableKeys } from '../../constants/tableKeys.constant';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class TableComponent {
   tableHeaders = tableHeaders;
   tableKeys = tableKeys;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private productsService: ProductService) {}
 
   actions = [
     {
@@ -26,8 +26,7 @@ export class TableComponent {
     {
       label: 'Eliminar',
       onClick: (id: string) => {
-        // mutateAsync(id),
-        // delete product
+        this.productsService.deleteProduct(id);
       },
     },
   ];

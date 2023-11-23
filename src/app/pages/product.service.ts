@@ -14,7 +14,7 @@ export interface Product {
 export const randomIntFromInterval = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-const getAuthorId = (): string => {
+export const getAuthorId = (): string => {
   let authorId = localStorage.getItem('authorId');
   if (!authorId) {
     authorId = String(randomIntFromInterval(1, 99999999));
