@@ -102,7 +102,7 @@ describe('ProductService', () => {
     const productId = '1';
 
     productService.deleteProduct(productId).subscribe((product) => {
-      expect(product.id).toEqual(productId);
+      expect(product).toBeTruthy();
     });
 
     const req = httpTestingController.expectOne(`/bp/products?id=${productId}`);

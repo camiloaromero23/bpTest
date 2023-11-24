@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropdownComponent } from './dropdown.component';
+import { Action, DropdownComponent } from './dropdown.component';
 
 describe('DropdownComponent', () => {
   let component: DropdownComponent;
@@ -18,12 +18,6 @@ describe('DropdownComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should call on click when handle click is called', () => {
-    const onClick = jasmine.createSpy('onClick');
-    component.handleClick({ label: 'test', onClick });
-    expect(onClick).toHaveBeenCalled();
   });
 
   it('should open the dropdown on click', () => {
@@ -48,5 +42,15 @@ describe('DropdownComponent', () => {
     component.clickedOut();
     component.clickedOut();
     expect(component.isOpen).toBeFalse();
+  });
+
+  it('should emit action when handleClick is called', () => {
+    const testAction: Action = { label: 'Test Action' };
+    let emittedAction: Action | undefined;
+    component.actionClick.subscribe((action) => (emittedAction = action));
+
+    component.handleClick(testAction);
+
+    expect(emittedAction).toEqual(testAction);
   });
 });

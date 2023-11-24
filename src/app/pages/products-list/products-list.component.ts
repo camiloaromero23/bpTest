@@ -32,8 +32,14 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
   page = 1;
   maxPages!: number;
 
-  @ViewChild('searchInput') searchInput!: ElementRef;
-  @ViewChild('select') select!: ElementRef;
+  @ViewChild('searchInput', {
+    static: true,
+  })
+  searchInput!: ElementRef;
+  @ViewChild('select', {
+    static: true,
+  })
+  select!: ElementRef;
 
   constructor(
     private productService: ProductService,
@@ -43,14 +49,14 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.refreshProducts();
 
-    fromEvent(this.searchInput.nativeElement, 'keyup')
+    fromEvent(this.searchInput?.nativeElement, 'keyup')
       .pipe(filter(Boolean), debounceTime(150), distinctUntilChanged())
       .subscribe(() => {
         this.updateProductsToShow();
       });
 
-    fromEvent(this.select.nativeElement, 'change').subscribe(() => {
-      this.productsAmountToShow = +this.select.nativeElement.value;
+    fromEvent(this.select?.nativeElement, 'change').subscribe(() => {
+      this.productsAmountToShow = +this.select?.nativeElement.value;
       this.updateProductsToShow();
     });
   }
@@ -59,8 +65,8 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
     this.maxPages = Math.ceil(
       this.products?.length / this.productsAmountToShow,
     );
-    const searchText = this.searchInput.nativeElement.value || '';
-    const productsAmount = +this.select.nativeElement.value || 5;
+    const searchText = this.searchInput?.nativeElement.value || '';
+    const productsAmount = +this.select?.nativeElement.value || 5;
 
     const pageToShow = 0 + (this.page - 1) * productsAmount;
     const pageProductsToShow = this.page * productsAmount;
@@ -99,7 +105,7 @@ export class ProductsListComponent implements AfterViewInit, OnDestroy {
         this.productsToShow$.next(products);
         this.products = products;
         this.maxPages = Math.ceil(products.length / this.productsAmountToShow);
-        this.productsAmountToShow = +this.select.nativeElement.value;
+        this.productsAmountToShow = +this.select?.nativeElement.value;
         this.updateProductsToShow();
       });
   }

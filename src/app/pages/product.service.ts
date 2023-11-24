@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface Product {
   id: string;
@@ -54,17 +54,15 @@ export class ProductService {
   }
 
   deleteProduct(id: string): Observable<string> {
-    return this.http
-      .delete('/bp/products', {
-        headers: {
-          authorId: getAuthorId(),
-        },
-        params: {
-          id,
-        },
-        responseType: 'text'
-      })
-      .pipe(catchError(this.handleError));
+    return this.http.delete('/bp/products', {
+      headers: {
+        authorId: getAuthorId(),
+      },
+      params: {
+        id,
+      },
+      responseType: 'text',
+    });
   }
   verifyProduct(id: string): Observable<boolean> {
     return this.http.get<boolean>('/bp/products/verification', {
@@ -75,19 +73,5 @@ export class ProductService {
         id,
       },
     });
-  }
-
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    // Handle the error in a way that fits your application
-    let errorMessage = 'An error occurred.';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
   }
 }

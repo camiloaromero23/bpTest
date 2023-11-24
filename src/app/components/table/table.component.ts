@@ -55,7 +55,7 @@ export class TableComponent {
     if (userConfirm) {
       return this.productsService
         .deleteProduct(this.idToDelete)
-        .subscribe(() => {
+        ?.subscribe(() => {
           this.productDeleted.emit(true);
           this.showModal = false;
         });

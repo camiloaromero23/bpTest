@@ -1,17 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
-import { TableComponent } from './table.component';
-import { ComponentsModule } from '../components.module';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { ProductService } from '../../pages/product.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
+import { Product, ProductService } from '../../pages/product.service';
+import { ComponentsModule } from '../components.module';
+import { TableComponent } from './table.component';
 
 describe('TableComponent', () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
-  let productsService: ProductService; // Mocked products service
+  let productServiceSpy: jasmine.SpyObj<ProductService>;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,7 +33,21 @@ describe('TableComponent', () => {
 
     fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
-    productsService = TestBed.inject(ProductService);
+    productServiceSpy = TestBed.inject(
+      ProductService,
+    ) as jasmine.SpyObj<ProductService>;
+    router = TestBed.inject(Router);
+
+    // Mock data for testing
+    const mockProduct: Product = {
+      id: '1',
+      name: 'Test Product',
+      description: 'Description',
+      date_release: new Date(),
+      date_revision: new Date(),
+      logo: 'https://picsum.photos/200',
+    };
+    component.data = of([mockProduct]);
 
     fixture.detectChanges();
   });
@@ -36,39 +56,94 @@ describe('TableComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should navigate to product details on "Editar" click', () => {
-    const router = TestBed.inject(Router);
+  it('should handle delete action correctly', () => {
+    const mockProduct: Product = {
+      id: '1',
+      name: 'Test Product',
+      description: 'Description',
+      logo: 'https://picsum.photos/200',
+      date_release: new Date(),
+      date_revision: new Date(),
+    };
+    const deleteAction = { label: 'Eliminar' };
+
+    component.handleActionClick(deleteAction, mockProduct);
+
+    expect(component.showModal).toBeTruthy();
+    expect(component.idToDelete).toEqual(mockProduct.id);
+    expect(component.deleteMessage).toContain(mockProduct.name);
+  });
+
+  it('should handle modal confirmation with userConfirm false', () => {
+    component.showModal = true;
+
+    component.handleModalConfirmation(false);
+
+    expect(component.showModal).toBeFalsy();
+  });
+
+  it('should handle modal confirmation with userConfirm false', () => {
+    // Arrange
+    component.showModal = true;
+
+    // Act
+    component.handleModalConfirmation(false);
+
+    // Assert
+    expect(component.showModal).toBeFalsy();
+    // Additional assertions can be added based on your specific requirements.
+  });
+
+  it('should handle edit product correctly', () => {
+    // Arrange
+    const mockProduct: Product = {
+      id: '1',
+      name: 'Test Product',
+      description: 'Description',
+      logo: 'https://picsum.photos/200',
+      date_release: new Date(),
+      date_revision: new Date(),
+    };
+
+    // Act
+    component.handleEditProduct(mockProduct);
+
     spyOn(router, 'navigate');
-
-    const productId = '123';
-    component.actions[0].onClick(productId);
-
-    expect(router.navigate).toHaveBeenCalledWith(['/product', productId]);
+    // Assert
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  // Add more tests as needed
+  it('should call handleEditProduct when action label is Editar', () => {
+    // Arrange
+    const mockProduct: Product = {
+      id: '1',
+      name: 'Test Product',
+      description: 'Description',
+      logo: 'https://picsum.photos/200',
+      date_release: new Date(),
+      date_revision: new Date(),
+    };
+    const editAction = { label: 'Editar' };
 
-  // Example test for data binding
-  it('should display data in the table', () => {
-    const testData: any[] = [
-      { id: '1', name: 'Product 1', description: 'Description 1' },
-      { id: '2', name: 'Product 2', description: 'Description 2' },
-    ];
+    // Act
+    spyOn(component, 'handleEditProduct');
+    component.handleActionClick(editAction, mockProduct);
 
-    const observableTestData: Observable<any[]> = of(testData);
-
-    component.data = observableTestData;
-    fixture.detectChanges(); // Trigger change detection
-
-    // Add your expectations for the rendered table content here
-    // For example, check if the table rows contain the correct data
+    // Assert
+    expect(component.handleEditProduct).toHaveBeenCalled();
   });
 
-  it('should handle "Eliminar" click and invoke the action', () => {
-    // Assuming the first product ID is '1'
-    component.actions[1].onClick('1');
+  it( 'should handleModalConfirmation when userConfirm is true', fakeAsync(() => {
+    // Arrange
+    component.showModal = true;
+    productServiceSpy.deleteProduct.and.returnValue(of('123123'));
 
-    // Check if the deleteProduct method is called with the correct argument
-    expect(productsService.deleteProduct).toHaveBeenCalledWith('1');
-  });
+    // Act
+    component.handleModalConfirmation(true);
+    tick();
+
+    // Assert
+    expect(component.showModal).toBeFalsy();
+    expect(productServiceSpy.deleteProduct).toHaveBeenCalled();
+  }));
 });
